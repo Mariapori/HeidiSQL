@@ -2425,6 +2425,16 @@ begin
 end;
 
 
+function TDBConnection.Clone(AOwner: TComponent): TDBConnection;
+begin
+  Result := TDBConnectionClass(ClassType).Create(AOwner);
+  Result.Parameters.Assign(FParameters);
+  Result.OnLog := FOnLog;
+  Result.OnDatabaseChanged := FOnDatabaseChanged;
+  Result.OnObjectnamesChanged := FOnObjectnamesChanged;
+end;
+
+
 procedure TDBConnection.SetLockedByThread(Value: TThread);
 begin
   FLockedByThread := Value;
@@ -2515,6 +2525,7 @@ begin
         case FParameters.SSLVerification of
           0: VerifyServerCert := FLib.MYBOOL_FALSE;
           1,2: VerifyServerCert := FLib.MYBOOL_TRUE;
+      function Clone(AOwner: TComponent): TDBConnection; virtual;
         end;
         SetOption(FLib.MYSQL_OPT_SSL_VERIFY_SERVER_CERT, @VerifyServerCert);
       end;
