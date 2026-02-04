@@ -166,7 +166,7 @@ object MainForm: TMainForm
         ShowHint = True
         TabOrder = 0
         TreeOptions.PaintOptions = [toHotTrack, toShowButtons, toShowDropmark, toShowRoot, toShowTreeLines, toThemeAware, toUseBlendedImages, toGhostedIfUnfocused, toUseExplorerTheme]
-        TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
+        TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect, toRightClickSelect]
         OnAfterCellPaint = DBtreeAfterCellPaint
         OnBeforeCellPaint = DBtreeBeforeCellPaint
         OnChange = DBtreeChange

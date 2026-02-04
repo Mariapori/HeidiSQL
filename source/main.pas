@@ -3227,9 +3227,10 @@ end;
 
 procedure TMainForm.actExecuteQueryExecute(Sender: TObject);
 var
-  ProfileNode: PVirtualNode;
+  ProfileNode, Node: PVirtualNode;
   Batch: TSQLBatch;
   Tab: TQueryTab;
+  DBObj: PDBObject;
   BindParam: Integer;
   NewSQL, msg, Command, SQLNoComments, CurrentQuery: String;
   Query: TSQLSentence;
@@ -3258,6 +3259,27 @@ begin
   end else begin
     Batch.SQL := Tab.Memo.Text;
     Tab.LeftOffsetInMemo := 0;
+  end;
+
+  // Check if multiple databases are selected in the tree
+  if (DBtree.SelectedCount > 1) and (Sender <> actExplainCurrentQuery) then begin
+    NewSQL := '';
+    // Iterate over selected nodes
+    Node := DBtree.GetFirstSelected;
+    while Assigned(Node) do begin
+      DBObj := DBtree.GetNodeData(Node);
+      if Assigned(DBObj) and (DBObj.NodeType = lntDb) then begin
+        // Prefix query with USE statement
+        if NewSQL <> '' then
+          NewSQL := NewSQL + sLineBreak + sLineBreak;
+        NewSQL := NewSQL + 'USE ' + ActiveConnection.QuoteIdent(DBObj.Database) + ';' + sLineBreak + Batch.SQL;
+      end;
+      Node := DBtree.GetNextSelected(Node);
+    end;
+    
+    // If we gathered any database specific queries, replace the original batch sql
+    if NewSQL <> '' then
+      Batch.SQL := NewSQL;
   end;
 
   // Check if there is bind parameters
