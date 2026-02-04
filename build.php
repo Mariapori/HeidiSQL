@@ -203,7 +203,7 @@ foreach($compileBits as $bit)
     $versionRevision = str_replace('%APPNAME%', APPNAME, $versionRevision);
     preg_match('#FILEVERSION\s+(\d+),(\d+),(\d+),(\d+)\b#i', $versionRevision, $matches);
     $shortVersion = $matches[1].'.'.$matches[2].'.'.$matches[3].'.'.$matches[4];
-    $fullVersion = $shortVersion.' '.$bit.' Bit';
+    $fullVersion = $shortVersion.'-mariapori '.$bit.' Bit';
     $versionRevision = str_replace('%APPVER%', $fullVersion, $versionRevision);
     file_put_contents($versionFile, $versionRevision);
 
